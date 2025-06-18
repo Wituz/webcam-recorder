@@ -96,6 +96,13 @@ async function initializeCamera() {
         const videoPreview = document.getElementById('videoPreview');
         videoPreview.srcObject = currentStream;
         
+        // Set video wrapper aspect ratio based on resolution
+        const videoWrapper = document.querySelector('.video-wrapper');
+        const aspectRatio = width / height;
+        
+        // Apply aspect ratio to maintain proper video proportions
+        videoWrapper.style.aspectRatio = aspectRatio.toString();
+        
         // Update device name display
         const track = currentStream.getVideoTracks()[0];
         const deviceName = track.label || 'Unknown Device';
@@ -346,6 +353,20 @@ function setStatus(message) {
 
 async function openSettings() {
     await ipcRenderer.invoke('open-settings');
+}
+
+// Toggle device info visibility
+function toggleDeviceInfo() {
+    const deviceInfo = document.getElementById('deviceInfo');
+    const toggleBtn = document.getElementById('infoToggle');
+    
+    if (deviceInfo.classList.contains('visible')) {
+        deviceInfo.classList.remove('visible');
+        toggleBtn.classList.remove('active');
+    } else {
+        deviceInfo.classList.add('visible');
+        toggleBtn.classList.add('active');
+    }
 }
 
 // Clean up on window close

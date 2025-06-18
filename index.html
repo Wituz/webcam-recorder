@@ -5,148 +5,418 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wituz Webcam</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            padding: 20px;
-            background: #f5f5f5;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
         
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            padding: 30px 40px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+            flex-shrink: 0;
         }
         
         h1 {
             margin: 0;
-            color: #333;
+            color: #2d3748;
+            font-weight: 700;
+            font-size: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .settings-btn {
-            background: #007AFF;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 12px 24px;
+            border-radius: 50px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         
         .settings-btn:hover {
-            background: #0056CC;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            overflow: hidden;
+            min-height: 0;
         }
         
         .video-container {
             position: relative;
-            background: #000;
-            border-radius: 8px;
+            background: transparent;
+            flex: 1;
+            min-height: 200px;
+            max-height: calc(100vh - 400px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .video-wrapper {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            border-radius: 20px;
             overflow: hidden;
-            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         #videoPreview {
             width: 100%;
-            height: 400px;
-            object-fit: cover;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 20px;
+            display: block;
         }
         
         .video-overlay {
             position: absolute;
             top: 10px;
             left: 10px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
+            padding: 8px 12px;
+            border-radius: 8px;
             font-size: 12px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+        
+        .controls-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
         }
         
         .controls {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 15px;
         }
         
         .record-btn {
-            background: #FF3B30;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
+            padding: 16px 40px;
+            border-radius: 50px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            min-width: 120px;
-            transition: all 0.2s;
+            font-size: 18px;
+            font-weight: 600;
+            min-width: 180px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .record-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .record-btn:hover::before {
+            left: 100%;
         }
         
         .record-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(255,59,48,0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.5);
         }
         
         .record-btn:disabled {
-            background: #ccc;
+            background: linear-gradient(135deg, #a0a0a0 0%, #888888 100%);
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
+            box-shadow: 0 4px 15px rgba(160, 160, 160, 0.3);
+        }
+        
+        .record-btn:disabled::before {
+            display: none;
         }
         
         .record-btn.recording {
-            background: #FF9500;
-            animation: pulse 2s infinite;
+            background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+            animation: recordingPulse 2s infinite;
+            box-shadow: 0 8px 25px rgba(255, 167, 38, 0.5);
         }
         
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
+        @keyframes recordingPulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 8px 25px rgba(255, 167, 38, 0.5);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 12px 35px rgba(255, 167, 38, 0.7);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 8px 25px rgba(255, 167, 38, 0.5);
+            }
         }
         
         .status {
             text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-            color: #666;
-            min-height: 20px;
+            font-size: 16px;
+            color: #4a5568;
+            min-height: 24px;
+            font-weight: 500;
         }
         
         .device-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 6px;
-            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .device-info.visible {
+            max-height: 500px;
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .device-info h3 {
-            margin: 0 0 10px 0;
-            font-size: 16px;
-            color: #333;
+            margin: 0 0 20px 0;
+            font-size: 20px;
+            color: #2d3748;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .device-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
         }
         
         .device-info p {
-            margin: 5px 0;
+            margin: 0;
             font-size: 14px;
-            color: #666;
+            color: #4a5568;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .device-info p strong {
+            color: #2d3748;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .recording-timer {
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            font-weight: bold;
-            color: #FF3B30;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            color: #ff6b6b;
+            text-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+        }
+        
+        /* Smooth fade-in animation for the entire app */
+        .container {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Video container entrance animation */
+        .video-container {
+            animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+        }
+        
+        @keyframes scaleIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Device info cards stagger animation */
+        .device-info p {
+            animation: slideInFromBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .device-info p:nth-child(1) { animation-delay: 0.1s; }
+        .device-info p:nth-child(2) { animation-delay: 0.2s; }
+        .device-info p:nth-child(3) { animation-delay: 0.3s; }
+        .device-info p:nth-child(4) { animation-delay: 0.4s; }
+        .device-info p:nth-child(5) { animation-delay: 0.5s; }
+        .device-info p:nth-child(6) { animation-delay: 0.6s; }
+        
+        .device-info p:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes slideInFromBottom {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Video overlay smooth appearance */
+        .video-overlay {
+            animation: fadeIn 0.5s ease-out 1s both;
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        /* Status text transitions */
+        .status {
+            transition: all 0.3s ease-out;
+        }
+        
+        /* Control button entrance */
+        .controls-section {
+            animation: slideUpFade 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
+        }
+        
+        @keyframes slideUpFade {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Toggle button for device info */
+        .info-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #667eea;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        .info-toggle:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .info-toggle.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: rotate(180deg);
+        }
+        
+        .info-toggle.active:hover {
+            transform: translateY(-2px) scale(1.05) rotate(180deg);
         }
     </style>
 </head>
@@ -157,30 +427,42 @@
             <button class="settings-btn" onclick="openSettings()">Settings</button>
         </div>
         
-        <div class="video-container">
-            <video id="videoPreview" autoplay muted></video>
-            <div class="video-overlay">
-                <span id="deviceName">No device selected</span>
+        <div class="main-content">
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <video id="videoPreview" autoplay muted></video>
+                    <div class="video-overlay">
+                        <span id="deviceName">No device selected</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls-section">
+                <div class="controls">
+                    <button id="recordBtn" class="record-btn" onclick="toggleRecording()" disabled>
+                        Start Recording
+                    </button>
+                </div>
+                
+                <div class="status" id="status">Initializing camera...</div>
+            </div>
+            
+            <div class="device-info" id="deviceInfo">
+                <h3>Current Settings</h3>
+                <div class="device-info-grid">
+                    <p><strong>Device:</strong> <span id="currentDevice">Loading...</span></p>
+                    <p><strong>Resolution:</strong> <span id="currentResolution">Loading...</span></p>
+                    <p><strong>Frame Rate:</strong> <span id="currentFrameRate">Loading...</span> fps</p>
+                    <p><strong>Audio Recording:</strong> <span id="currentAudio">Loading...</span></p>
+                    <p><strong>Output Path:</strong> <span id="currentPath">Loading...</span></p>
+                    <p><strong>Global Shortcut:</strong> <span id="currentShortcut">Loading...</span></p>
+                </div>
             </div>
         </div>
         
-        <div class="controls">
-            <button id="recordBtn" class="record-btn" onclick="toggleRecording()" disabled>
-                Start Recording
-            </button>
-        </div>
-        
-        <div class="status" id="status">Initializing camera...</div>
-        
-        <div class="device-info">
-            <h3>Current Settings</h3>
-            <p><strong>Device:</strong> <span id="currentDevice">Loading...</span></p>
-            <p><strong>Resolution:</strong> <span id="currentResolution">Loading...</span></p>
-            <p><strong>Frame Rate:</strong> <span id="currentFrameRate">Loading...</span> fps</p>
-            <p><strong>Audio Recording:</strong> <span id="currentAudio">Loading...</span></p>
-            <p><strong>Output Path:</strong> <span id="currentPath">Loading...</span></p>
-            <p><strong>Global Shortcut:</strong> <span id="currentShortcut">Loading...</span></p>
-        </div>
+        <button class="info-toggle" id="infoToggle" onclick="toggleDeviceInfo()" title="Toggle Settings Info">
+            ⓘ
+        </button>
     </div>
 
     <script src="renderer.js"></script>
