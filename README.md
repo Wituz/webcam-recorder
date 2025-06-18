@@ -2,6 +2,8 @@
 
 A simple Electron application for webcam recording with the following features:
 
+![Screenshot 2025-06-18 at 12 34 53](https://github.com/user-attachments/assets/8cf0ebfc-f4d6-4398-8d70-436e27d6c3c1)
+
 ## Features
 
 - **Video Preview**: Real-time webcam preview
