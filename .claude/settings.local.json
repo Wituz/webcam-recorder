@@ -7,7 +7,9 @@
       "Bash(grep:*)",
       "Bash(ls:*)",
       "Bash(sips:*)",
-      "Bash(magick:*)"
+      "Bash(magick:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)"
     ],
     "deny": []
   }
