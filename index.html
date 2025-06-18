@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wituz Webcam</title>
+    <title>Wituz's webcam recorder - an alright OBS supplement :^)</title>
     <style>
         * {
             box-sizing: border-box;
@@ -32,52 +32,13 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
         
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 40px;
-            background: linear-gradient(90deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 100%);
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-            backdrop-filter: blur(10px);
-            flex-shrink: 0;
-        }
-        
-        h1 {
-            margin: 0;
-            color: #2d3748;
-            font-weight: 700;
-            font-size: 28px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .settings-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .settings-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
         
         .main-content {
             flex: 1;
-            padding: 40px;
+            padding: 20px 30px 30px 30px;
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 20px;
             overflow: hidden;
             min-height: 0;
         }
@@ -86,8 +47,8 @@
             position: relative;
             background: transparent;
             flex: 1;
-            min-height: 200px;
-            max-height: calc(100vh - 400px);
+            min-height: 300px;
+            max-height: calc(100vh - 180px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -132,8 +93,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             flex-shrink: 0;
+            padding: 10px 0;
         }
         
         .controls {
@@ -218,64 +180,6 @@
             font-weight: 500;
         }
         
-        .device-info {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            padding: 25px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            flex-shrink: 0;
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .device-info.visible {
-            max-height: 500px;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .device-info h3 {
-            margin: 0 0 20px 0;
-            font-size: 20px;
-            color: #2d3748;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .device-info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        
-        .device-info p {
-            margin: 0;
-            font-size: 14px;
-            color: #4a5568;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-        }
-        
-        .device-info p strong {
-            color: #2d3748;
-            font-weight: 600;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
         
         .recording-timer {
             font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
@@ -317,23 +221,6 @@
             }
         }
         
-        /* Device info cards stagger animation */
-        .device-info p {
-            animation: slideInFromBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .device-info p:nth-child(1) { animation-delay: 0.1s; }
-        .device-info p:nth-child(2) { animation-delay: 0.2s; }
-        .device-info p:nth-child(3) { animation-delay: 0.3s; }
-        .device-info p:nth-child(4) { animation-delay: 0.4s; }
-        .device-info p:nth-child(5) { animation-delay: 0.5s; }
-        .device-info p:nth-child(6) { animation-delay: 0.6s; }
-        
-        .device-info p:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
         
         @keyframes slideInFromBottom {
             0% {
@@ -381,8 +268,8 @@
             }
         }
         
-        /* Toggle button for device info */
-        .info-toggle {
+        /* Settings button */
+        .settings-toggle {
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -401,32 +288,18 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            border: none;
         }
         
-        .info-toggle:hover {
+        .settings-toggle:hover {
             transform: translateY(-2px) scale(1.05);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             background: rgba(255, 255, 255, 0.95);
-        }
-        
-        .info-toggle.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            transform: rotate(180deg);
-        }
-        
-        .info-toggle.active:hover {
-            transform: translateY(-2px) scale(1.05) rotate(180deg);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Wituz Webcam</h1>
-            <button class="settings-btn" onclick="openSettings()">Settings</button>
-        </div>
-        
         <div class="main-content">
             <div class="video-container">
                 <div class="video-wrapper">
@@ -446,22 +319,10 @@
                 
                 <div class="status" id="status">Initializing camera...</div>
             </div>
-            
-            <div class="device-info" id="deviceInfo">
-                <h3>Current Settings</h3>
-                <div class="device-info-grid">
-                    <p><strong>Device:</strong> <span id="currentDevice">Loading...</span></p>
-                    <p><strong>Resolution:</strong> <span id="currentResolution">Loading...</span></p>
-                    <p><strong>Frame Rate:</strong> <span id="currentFrameRate">Loading...</span> fps</p>
-                    <p><strong>Audio Recording:</strong> <span id="currentAudio">Loading...</span></p>
-                    <p><strong>Output Path:</strong> <span id="currentPath">Loading...</span></p>
-                    <p><strong>Global Shortcut:</strong> <span id="currentShortcut">Loading...</span></p>
-                </div>
-            </div>
         </div>
         
-        <button class="info-toggle" id="infoToggle" onclick="toggleDeviceInfo()" title="Toggle Settings Info">
-            ⓘ
+        <button class="settings-toggle" onclick="openSettings()" title="Settings">
+            ⚙️
         </button>
     </div>
 

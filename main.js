@@ -16,8 +16,9 @@ const createMainWindow = () => {
       contextIsolation: false,
       enableRemoteModule: true
     },
-    icon: path.join(__dirname, 'assets', 'icon.png'),
-    show: false
+    icon: nativeImage.createFromPath(path.join(__dirname, 'assets', 'icon.png')),
+    show: false,
+    skipTaskbar: false
   });
 
   mainWindow.loadFile('index.html');
@@ -26,6 +27,17 @@ const createMainWindow = () => {
     if (!app.isQuitting) {
       event.preventDefault();
       mainWindow.hide();
+      if (process.platform === 'darwin') {
+        app.dock.hide();
+      }
+    }
+  });
+
+  mainWindow.on('minimize', (event) => {
+    if (process.platform === 'darwin') {
+      event.preventDefault();
+      mainWindow.hide();
+      app.dock.hide();
     }
   });
 
@@ -62,13 +74,19 @@ const createSettingsWindow = () => {
 const createTray = () => {
   const iconPath = path.join(__dirname, 'assets', 'tray-icon.png');
   const trayIcon = nativeImage.createFromPath(iconPath);
-  tray = new Tray(trayIcon.resize({ width: 16, height: 16 }));
+  if (process.platform === 'darwin') {
+    trayIcon.setTemplateImage(true);
+  }
+  tray = new Tray(trayIcon);
 
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Show App',
       click: () => {
         mainWindow.show();
+        if (process.platform === 'darwin') {
+          app.dock.show();
+        }
       }
     },
     {
@@ -93,7 +111,14 @@ const createTray = () => {
   tray.setToolTip('Wituz Webcam');
 
   tray.on('click', () => {
-    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+      if (process.platform === 'darwin') {
+        app.dock.show();
+      }
+    }
   });
 };
 
@@ -114,6 +139,12 @@ const registerGlobalShortcuts = () => {
 };
 
 app.whenReady().then(() => {
+  // Set dock icon explicitly for macOS
+  if (process.platform === 'darwin') {
+    const dockIcon = nativeImage.createFromPath(path.join(__dirname, 'assets', 'icon.png'));
+    app.dock.setIcon(dockIcon);
+  }
+  
   createMainWindow();
   createTray();
   registerGlobalShortcuts();

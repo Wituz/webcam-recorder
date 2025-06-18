@@ -5,29 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - Wituz Webcam</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 20px;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             font-size: 14px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 500px;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         h1 {
-            margin: 0 0 20px 0;
-            color: #333;
-            font-size: 20px;
+            margin: 0 0 30px 0;
+            color: #2d3748;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
         }
         
         .setting-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            animation: slideInFromBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+        
+        .setting-group:nth-child(1) { animation-delay: 0.1s; }
+        .setting-group:nth-child(2) { animation-delay: 0.2s; }
+        .setting-group:nth-child(3) { animation-delay: 0.3s; }
+        .setting-group:nth-child(4) { animation-delay: 0.4s; }
+        .setting-group:nth-child(5) { animation-delay: 0.5s; }
+        .setting-group:nth-child(6) { animation-delay: 0.6s; }
+        .setting-group:nth-child(7) { animation-delay: 0.7s; }
+        
+        @keyframes slideInFromBottom {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .setting-group:last-child {
@@ -36,25 +86,35 @@
         
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #333;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
         }
         
         select, input {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
             font-size: 14px;
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
             box-sizing: border-box;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         select:focus, input:focus {
             outline: none;
-            border-color: #007AFF;
-            box-shadow: 0 0 0 3px rgba(0,122,255,0.1);
+            border-color: rgba(102, 126, 234, 0.6);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
+        }
+        
+        select:hover, input:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-1px);
         }
         
         .path-input-group {
@@ -67,33 +127,45 @@
         }
         
         .browse-btn {
-            background: #007AFF;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 12px 20px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
             white-space: nowrap;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         
         .browse-btn:hover {
-            background: #0056CC;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
         
         .shortcut-input {
-            background: #f8f9fa;
-            border: 2px dashed #ddd;
+            background: rgba(255, 255, 255, 0.6);
+            border: 2px dashed rgba(255, 255, 255, 0.4);
             text-align: center;
-            padding: 20px;
-            border-radius: 6px;
+            padding: 24px;
+            border-radius: 12px;
             cursor: pointer;
             user-select: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .shortcut-input:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-1px);
         }
         
         .shortcut-input.listening {
-            border-color: #007AFF;
-            background: #f0f8ff;
+            border-color: rgba(102, 126, 234, 0.6);
+            background: rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
         }
         
         .shortcut-display {
@@ -111,51 +183,94 @@
         .buttons {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
+            gap: 15px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .btn {
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 12px 24px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
             border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
         }
         
         .btn-secondary {
-            background: #f1f1f1;
-            color: #333;
+            background: rgba(255, 255, 255, 0.7);
+            color: #2d3748;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .btn-secondary:hover {
-            background: #e1e1e1;
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
         
         .btn-primary {
-            background: #007AFF;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         
         .btn-primary:hover {
-            background: #0056CC;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
         
         .permission-warning {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 6px;
-            padding: 12px;
-            margin-top: 10px;
+            background: rgba(255, 243, 205, 0.9);
+            border: 1px solid rgba(255, 234, 167, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 15px;
             font-size: 13px;
             color: #856404;
+            backdrop-filter: blur(10px);
+            animation: slideInFromBottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .permission-warning strong {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        /* Checkbox styling */
+        input[type="checkbox"] {
+            width: auto !important;
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+        
+        /* Help text styling */
+        .help-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 5px;
+            line-height: 1.4;
         }
     </style>
 </head>
@@ -193,10 +308,10 @@
         
         <div class="setting-group">
             <label for="recordAudio">
-                <input type="checkbox" id="recordAudio" style="margin-right: 8px;">
+                <input type="checkbox" id="recordAudio">
                 Record Audio (separate file)
             </label>
-            <div style="font-size: 12px; color: #666; margin-top: 5px;">
+            <div class="help-text">
                 Audio will be saved as a separate WebM file alongside the video
             </div>
         </div>

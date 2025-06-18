@@ -110,7 +110,7 @@ async function initializeCamera() {
         
         // Enable record button
         document.getElementById('recordBtn').disabled = false;
-        setStatus('Camera ready');
+        setStatus(`Press ${currentSettings.globalShortcut} to record`);
         
     } catch (error) {
         console.error('Error accessing camera:', error);
@@ -355,19 +355,6 @@ async function openSettings() {
     await ipcRenderer.invoke('open-settings');
 }
 
-// Toggle device info visibility
-function toggleDeviceInfo() {
-    const deviceInfo = document.getElementById('deviceInfo');
-    const toggleBtn = document.getElementById('infoToggle');
-    
-    if (deviceInfo.classList.contains('visible')) {
-        deviceInfo.classList.remove('visible');
-        toggleBtn.classList.remove('active');
-    } else {
-        deviceInfo.classList.add('visible');
-        toggleBtn.classList.add('active');
-    }
-}
 
 // Clean up on window close
 window.addEventListener('beforeunload', () => {
